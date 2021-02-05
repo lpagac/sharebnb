@@ -3,7 +3,7 @@ from typing import List
 from ninja import NinjaAPI, Schema, Form
 from django.shortcuts import get_object_or_404
 from sharebnb.models import Listing, CustomUser
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as UserModel
 from ninja import File, Router
 from ninja.files import UploadedFile
 from .boto3_upload import upload_image
@@ -13,6 +13,10 @@ from .boto3_upload import upload_image
 # DO S3 FIRST THING!!!!!! or django-storage
 
 router = Router()
+
+
+class FileSchema(Schema):
+    image_file: UploadedFile = File(...)
 
 
 class User(Schema):
@@ -32,7 +36,7 @@ class PathDateTime(Schema):
 
 class ListingIn(Schema):
     username: str
-    address: str
+    location: str
     price_per_hour: str = None
     price_per_day: str = None
     price_per_month: str = None
@@ -65,16 +69,27 @@ def hello(request):
 @router.post("/")
 # , payload: ListingIn, file: UploadedFile = File(...)
 def create_listing(request, payload: ListingIn):
-    new_listing_data = payload.dict()
-    user = User.objects.get(username=payload.username())
+    print("create_listing ran")
+    user = UserModel.objects.get(username=payload.username)
     host = CustomUser.objects.get(user=user)
-    new_listing_data["user"] = host
+    new_listing_data = {
+        "user": host,
+        "location": payload.location,
+        "price_per_hour": payload.price_per_hour,
+        "price_per_day": payload.price_per_day,
+        "price_per_month": payload.price_per_month,
+        "description": payload.description,
+        "max_guests": payload.max_guests,
+        "title": payload.title,
+        "listing_type": payload.listing_type
+    }
     listing = Listing.objects.create(**new_listing_data)
     return {"id": listing.id}
 
 
-@router.get("/{listing_id}/image-upload")
-def upload_form_image(request, listing_id: int, file: UploadedFile = File(...)): 
+@router.post("/{listing_id}/image-upload/")
+def upload_form_image(request, listing_id: int, file: UploadedFile = File(...)):
+    print("upload ran")
     image_url = upload_image(file)
     listing = Listing.objects.get(id=listing_id)
     listing.image_url = image_url

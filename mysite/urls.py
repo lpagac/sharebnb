@@ -26,5 +26,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('frontend.urls')),
     path("api/", api.urls),
-    path('', include('sharebnb.urls')),
 ]

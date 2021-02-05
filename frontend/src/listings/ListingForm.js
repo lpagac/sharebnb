@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Alert from "../common/Alert";
-import SharebnbApi from "../api/api";
+import axios from "axios";
 import BookingForm from "../booking/BookingForm";
 
 /** Renders form to book a Listing
@@ -16,16 +16,16 @@ import BookingForm from "../booking/BookingForm";
 function ListingForm(props) {
   const history = useHistory();
   const [formData, setFormData] = useState({
-    location: '',
-    price_per_hour: '',
-    price_per_day: '',
-    price_per_month: '',
-    description: '',
-    max_guests: '',
-    title: '',
-    listing_type: '',
+    location: 'earth',
+    price_per_hour: '1',
+    price_per_day: '2',
+    price_per_month: '3',
+    description: 'adasd',
+    max_guests: '3',
+    title: 'title',
+    listing_type: 'backyard',
     image_file: '',
-    username: 'j.lei',
+    username: 'lucaspagac',
   });
   const [formErrors, setFormErrors] = useState(false);
 
@@ -42,18 +42,22 @@ function ListingForm(props) {
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      let result = await fetch
-      ("http://localhost:8000/api/listings/",
-      {method: 'POST', 
-       body: {payload: {...formData, image_file: ""}}});
-      console.log(result.id, "result id ");
-      // upload image
-      await fetch(`http://localhost:8000/api/listings/1/image-upload/`,
-        {method: 'POST', 
-        body: {file: formData.image_file}});
-      //  headers: {
-      //   'Content-Type': 'multipart/form-data','boundry':"----WebKitFormBoundary7MA4YWxkTrZu0gW"}});
-      // history.push(`/listings/${result.id}`);
+      let result = await axios.post("http://localhost:8000/api/listings/", formData);
+      // ("http://localhost:8000/api/listings/",
+      // {method: 'POST', 
+      //  body: formData))
+      // console.log(result.id, "result id ");
+      // // upload image
+      let image_file = formData.image_file;
+      await axios.post(`http://localhost:8000/api/listings/1/image-upload/`, {image_file}, {headers: {
+        'Content-Type': 'multipart/form-data',
+        "boundary": "frontier"
+      }})
+      //   {method: 'POST', 
+      //   body: JSON.stringify({file: formData.image_file}),
+      //   headers: {
+      //   'Content-Type': 'multipart/form-data'}});
+      // // history.push(`/listings/${result.id}`);
     } catch (err) {
       setFormErrors(true);
     }
@@ -67,7 +71,6 @@ function ListingForm(props) {
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <input hidden value="j.lei"/>
                 <label>Location</label>
                 <input
                     name="location"
@@ -145,16 +148,6 @@ function ListingForm(props) {
                     onChange={handleChange}
                 />
               </div>
-              <div className="form-group">
-                <label>Photo of space</label>
-                <input
-                    type="file"
-                    name="image_file"
-                    className="form-control"
-                    value={formData.end_time}
-                    onChange={handleChange}
-                />
-              </div>
 
               {formErrors
                   ? <Alert type="danger" message={'Error submitting'} />
@@ -167,6 +160,17 @@ function ListingForm(props) {
               >
                 Submit
               </button>
+            </form>
+            <form action="/api/listings/4/image-upload/" method="POST" enctype="multipart/formdata">
+              <div className="form-group">
+                  <label>Photo of space</label>
+                  <input
+                      type="file"
+                      name="image_file"
+                      className="form-control"
+                  />
+                </div>
+                <button type="submit">Submit</button>
             </form>
           </div>
         </div>

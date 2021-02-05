@@ -52,7 +52,8 @@ class Listing(models.Model):
     description = models.TextField()
     max_guests = models.IntegerField(validators=[MinValueValidator(0)])
     rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
+        default=5
     )
     title = models.CharField(max_length=200)
     location = models.CharField(
