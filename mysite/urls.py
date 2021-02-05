@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .apis.api_user import api
 from ninja import NinjaAPI
 from .apis.api_listing import router as listings_router
 
