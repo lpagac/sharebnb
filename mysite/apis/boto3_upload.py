@@ -1,7 +1,7 @@
 
 import boto3
 import os
-from secrets import ACCESS_KEY, SECRET_ACCESS_KEY, BUCKET_NAME
+from credentials import ACCESS_KEY, SECRET_ACCESS_KEY, BUCKET_NAME
 client = boto3.client('s3',
                       aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_ACCESS_KEY)

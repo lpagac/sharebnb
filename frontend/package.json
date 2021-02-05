@@ -5,23 +5,32 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend",
+    "dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./static/frontend",
     "build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
+    "@babel/core": "^7.12.13",
+    "@babel/plugin-proposal-class-properties": "^7.12.13",
+    "@babel/plugin-transform-runtime": "^7.12.15",
+    "@babel/preset-env": "^7.12.13",
+    "@babel/preset-react": "^7.12.13",
+    "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",
+    "babel-polyfill": "^6.26.0",
+    "css-loader": "^5.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "webpack": "^5.20.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.20.2",
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.12.13",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "react-router-dom": "^5.2.0"
   }
 }

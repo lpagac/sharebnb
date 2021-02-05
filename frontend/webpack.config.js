@@ -1,4 +1,5 @@
 module.exports = {
+  entry: ['babel-polyfill','./src/index.js'],
   module: {
     rules: [
       {
@@ -7,8 +8,14 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+        ]
+      },
     ]
   },
-  mode: "development"
 };

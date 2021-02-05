@@ -1,33 +1,25 @@
+import './App.css';
 import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import BookingForm from "./BookingForm";
+import { BrowserRouter } from "react-router-dom";
+import Navigation from "./routes-nav/Navigation";
+import Routes from "./routes-nav/Routes";
+import LoadingSpinner from "./common/LoadingSpinner";
+import SharebnbApi from "./api/api";
+import UserContext from "./auth/UserContext";
 
 function App() {
-  const [listings, setListings ] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(function makeAPIRequest() {
-    async function fetchListings() {
-      try {
-        let listings = await fetch("api/listings");
-        setListings(listings);
-        setIsLoading(false);
-      } catch(err) {
-        setListings(null);
-        setIsLoading(false);
-        console.error('ERROR: ', err);
-      }
-    if (isLoading) fetchListings();  
-    }
-  }, [isLoading])
 
   return (
-    <div className="App">
-      <h1>Hello</h1>
-      <BookingForm />
-    </div>
-  )
+    <BrowserRouter>
+      <UserContext.Provider
+        value={'currUser'}>
+        <div className="App">
+          <Navigation />
+          <Routes />
+        </div>
+      </UserContext.Provider>
+    </BrowserRouter>
+  );
 }
 
 export default App;
-

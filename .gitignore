@@ -25,4 +25,4 @@ datadump.json
 .vscode/
 .history/
 *.code-workspace
-secrets.py
+credentials.py

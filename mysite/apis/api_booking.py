@@ -8,7 +8,7 @@ from psycopg2.extras import DateTimeTZRange
 
 
 class User(Schema):
-    id: int
+    username: str
     first_name: str
     last_name: str
 
@@ -64,7 +64,7 @@ class BookingOut(Schema):
 @api.post("booking/")
 def create_booking(request, payload: BookingIn):
     listing = get_object_or_404(Listing, id=payload["listing_id"])
-    guest = get_object_or_404(CustomUser, id=payload["guest.id"])
+    guest = get_object_or_404(CustomUser, username=payload["guest.username"])
     date_time_range = DateTimeTZRange(payload["start_time"], payload["end_time"])
     duration = Booking.calculate_duration(date_time_range)
     total_price = Booking.calculate_total_price(duration, payload["price_type"], listing)
@@ -102,7 +102,7 @@ def get_listing(request, booking_id: int):
 def update_listing(request, booking_id: int, payload: BookingIn):
     booking = get_object_or_404(Booking, id=booking_id)
     listing = get_object_or_404(Listing, id=payload["listing_id"])
-    guest = get_object_or_404(CustomUser, id=payload["guest.id"])
+    guest = get_object_or_404(CustomUser, username=payload["guest.username"])
     date_time_range = DateTimeTZRange(payload["start_time"], payload["end_time"])
     duration = Booking.calculate_duration(date_time_range)
     total_price = Booking.calculate_total_price(duration, payload["price_type"], listing)
