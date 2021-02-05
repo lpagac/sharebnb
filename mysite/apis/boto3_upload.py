@@ -1,15 +1,11 @@
 
 import boto3
 import os
-
-
-access_key = os.environ.get("ACCESS_KEY")
-secret_access_key = os.environ.get("SECRET_ACCESS_KEY")
-bucket_name = os.environ.get("BUCKET_NAME")
-print("bucket name", bucket_name)
+from secrets import ACCESS_KEY, SECRET_ACCESS_KEY, BUCKET_NAME
+print(ACCESS_KEY, SECRET_ACCESS_KEY, BUCKET_NAME)
 client = boto3.client('s3',
-                      aws_access_key_id=access_key,
-                      aws_secret_access_key=secret_access_key)
+                      aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_ACCESS_KEY)
 
 
 def upload_image(image_file):
@@ -17,12 +13,17 @@ def upload_image(image_file):
         url = client.generate_presigned_url(
             ClientMethod='get_object',
             Params={
-                'Bucket': bucket_name,
+                'Bucket': BUCKET_NAME,
                 'Key': upload_file_key
             }
         )
         return url
     upload_file_key = image_file
-    client.upload_file(image_file, bucket_name, upload_file_key)
+    client.upload_file(image_file, BUCKET_NAME, upload_file_key)
 
     return generate_presigned_url(upload_file_key)
+
+
+for file in os.listdir('mysite/apis'):
+    if '.jpeg' in file:
+        print(upload_image(f"mysite/apis/{file}"))
