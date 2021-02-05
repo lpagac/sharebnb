@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
-
+import BookingForm from "./BookingForm";
 
 function App() {
   const [listings, setListings ] = useState(null);
@@ -23,13 +23,11 @@ function App() {
 
   return (
     <div className="App">
-      NEED: ListingsList, Listing
-      listings here
+      <h1>Hello</h1>
+      <BookingForm />
     </div>
   )
 }
 
 export default App;
 
-const container = document.getElementById("root");
-render(<App />, container);
