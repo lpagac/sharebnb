@@ -4,9 +4,7 @@ from ninja import NinjaAPI, Schema
 from django.shortcuts import get_object_or_404
 from sharebnb.models import Listing, CustomUser, Booking
 from psycopg2.extras import DateTimeTZRange
-
-
-booking_api = NinjaAPI()
+# from .api_user import api
 
 
 class User(Schema):
@@ -63,7 +61,7 @@ class BookingOut(Schema):
     confirmed: bool
 
 
-@booking_api.post("/")
+@api.post("booking/")
 def create_booking(request, payload: BookingIn):
     listing = get_object_or_404(Listing, id=payload["listing_id"])
     guest = get_object_or_404(CustomUser, id=payload["guest.id"])
@@ -83,7 +81,7 @@ def create_booking(request, payload: BookingIn):
     return {"id": booking.id}
 
 
-@booking_api.get("/{booking_id}", response=BookingOut)
+@api.get("booking/{booking_id}", response=BookingOut)
 def get_listing(request, booking_id: int):
     booking = get_object_or_404(Listing, id=booking_id)
     booking_return = {
@@ -100,7 +98,7 @@ def get_listing(request, booking_id: int):
     return booking_return
 
 
-@booking_api.put("/{booking_id}")
+@api.put("booking/{booking_id}")
 def update_listing(request, booking_id: int, payload: BookingIn):
     booking = get_object_or_404(Booking, id=booking_id)
     listing = get_object_or_404(Listing, id=payload["listing_id"])
@@ -123,7 +121,7 @@ def update_listing(request, booking_id: int, payload: BookingIn):
     return {"success": True}
 
 
-@booking_api.delete("/{booking_id}")
+@api.delete("booking/{booking_id}")
 def delete_booking(request, booking_id: int):
     booking = get_object_or_404(Booking, id=booking_id)
     booking.delete()

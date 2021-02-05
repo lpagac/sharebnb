@@ -15,15 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .apis.api_booking import booking_api
-from .apis.api_listing import listing_api
-from .apis.api_user import user_api
+from .apis.api_user import api
+from ninja import NinjaAPI
+from .apis.api_listing import router as listings_router
+
+api = NinjaAPI()
+
+api.add_router('/listings', listings_router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sharebnb.urls')),
     path('', include('frontend.urls')),
-    path("api/booking", booking_api.urls),
-    path("api/listings", listing_api.urls),
-    path("api/users", user_api.urls),
+    path("api/", api.urls),
+    path('', include('sharebnb.urls')),
 ]
